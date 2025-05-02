@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Run Services') {
+        stage('Start Services') {
             steps {
                 bat 'docker-compose up -d'
             }
@@ -26,15 +26,15 @@ pipeline {
 
         stage('Run Backend Tests') {
             steps {
-                // Replace `backend` with the actual container name if different
-                bat 'docker-compose exec backend pytest'
+                // Run pytest in backend
+                bat 'docker-compose exec -T backend pytest'
             }
         }
 
         stage('Run Frontend Tests') {
             steps {
-                // Replace `frontend` with the actual container name if different
-                bat 'docker-compose exec frontend npm test'
+                // Run npm test in frontend-dev (dev container)
+                bat 'docker-compose exec -T frontend-dev npm test'
             }
         }
 
@@ -47,7 +47,7 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo 'Cleaning up resources...'
             bat 'docker-compose down --volumes --remove-orphans'
         }
     }

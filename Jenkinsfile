@@ -14,33 +14,33 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                bat 'docker-compose build'
             }
         }
 
         stage('Run Services') {
             steps {
-                sh 'docker-compose up -d'
+                bat 'docker-compose up -d'
             }
         }
 
         stage('Run Backend Tests') {
             steps {
-                // Assuming your backend service is named "backend"
-                sh 'docker-compose exec backend pytest'
+                // Replace `backend` with the actual container name if different
+                bat 'docker-compose exec backend pytest'
             }
         }
 
         stage('Run Frontend Tests') {
             steps {
-                // Assuming your frontend service is named "frontend"
-                sh 'docker-compose exec frontend npm test'
+                // Replace `frontend` with the actual container name if different
+                bat 'docker-compose exec frontend npm test'
             }
         }
 
         stage('Stop Services') {
             steps {
-                sh 'docker-compose down'
+                bat 'docker-compose down'
             }
         }
     }
@@ -48,7 +48,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            sh 'docker-compose down --volumes --remove-orphans'
+            bat 'docker-compose down --volumes --remove-orphans'
         }
     }
 }
